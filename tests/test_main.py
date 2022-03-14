@@ -34,7 +34,7 @@ def test_python_bedevere(capfd):
     org = 'python'
     repo = 'bedevere'
     head = 'bbc8f7eb9f1bd2e6f65a6165ce166eb085c5997f'
-    base = 'bde828fcc17f95e82337d2313d163bfbcc9467ac'
+    base = '188ae7db7864594bc723c1fd61d9718e6e692eba'
     commit_compare(pat=pat, org=org, repo=repo, head=head, base=base)
     out, err = capfd.readouterr()
     answer = """2017-03-31 23:04:47 - Brett Cannon - Initial commit
