@@ -1,10 +1,13 @@
 import argparse
-import git
+import logging
+import sys
 from github import Github
+
+log = logging.getLogger()
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--pat', type=str, help='Github personal-access-token required.', required=True)
+    parser.add_argument('--pat', type=str, help='Github personal-access-token required.')
     parser.add_argument('--org', type=str, help='Github organization name required.', required=True)
     parser.add_argument('--repo', type=str, help='Github repository name required.', required=True)
     parser.add_argument('--head', type=str, help='Head commit required.', required=True)
@@ -33,8 +36,23 @@ def display_results(commits):
         name = c.commit.author.name
         message = c.commit.message.split('\n')[0]
         print(f"{date} - {name} - {message}")
+    return
 
-def main():
+def get_repo(pat, org, repo):
+    g = Github(args.pat if args.pat else None)
+    try:
+        return g.get_repo(f"{args.org}/{args.repo}")
+    except:
+        log.error("Unabe to connect to repo.")
+        sys.exit()
+
+def commit_compare(pat, org, repo, head, base):
+    repo = get_repo(pat=pat, org=org, repo=repo)
+    commits = repo.get_commits()
+    relevant_commits = traverse_git_tree(head, base, commits)
+    display_results(relevant_commits.__reversed__())
+
+if __name__ == "__main__":
     # Get/Set Arguments
     args = get_args()
     pat = args.pat
@@ -42,15 +60,5 @@ def main():
     repo = args.repo
     head = args.head
     base = args.base
-
-    # Connect to GitHub
-    g = Github(args.pat)
-    repo = g.get_repo(f"{args.org}/{args.repo}")
-    commits = repo.get_commits()
-
-    relevant_commits = traverse_git_tree(head, base, commits)
-
-    display_results(relevant_commits.__reversed__())
-
-if __name__ == "__main__":
-    main()
+    # Process
+    commit_compare(pat=pat, org=org, repo=repo, head=head, base=base)
