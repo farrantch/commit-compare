@@ -1,3 +1,4 @@
+import pytest
 from main import commit_compare
 
 def test_farrantch_saaas_small(capfd):
@@ -28,6 +29,16 @@ def test_farrantch_saaas_large(capfd):
 2019-04-18 23:22:26 - Chase Farrant - Update README.md\n"""
     assert out == answer
 
+
+def test_invalid_head(capfd):
+    pat = None
+    org = 'farrantch'
+    repo = 'saaas'
+    head = '61eb66767e2b6197fb5b499d34fa1e17f834d1c'
+    base = '1ed614fbd4600b4e736e4a36ada545a9bc95ca27'
+    with pytest.raises(SystemExit) as e:
+        commit_compare(pat=pat, org=org, repo=repo, head=head, base=base)
+    assert e.type == SystemExit
 
 def test_python_bedevere(capfd):
     pat = None
