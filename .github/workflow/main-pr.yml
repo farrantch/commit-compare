@@ -8,10 +8,11 @@ on:
     
 jobs:
   Tests:
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
         python-version: [3.8.2]
-    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
