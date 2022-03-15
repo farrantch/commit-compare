@@ -25,9 +25,12 @@ def traverse_git_tree(next_sha, base, commits):
                 temp = [item]
                 temp.extend(result)
                 return temp
+    elif len(item.parents) == 0:
+        log.error("Unable to find coorelation between the commits. Perhaps they are swapped?")
+        return []
     elif item == None:
         log.error("Error. Unable to find commit.")
-    return []
+        return []
 
 def display_results(commits):
     for c in commits:

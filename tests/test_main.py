@@ -40,6 +40,16 @@ def test_invalid_head(capfd):
         commit_compare(pat=pat, org=org, repo=repo, head=head, base=base)
     assert e.type == SystemExit
 
+def test_uncorrelated_commits(capfd):
+    pat = None
+    org = 'farrantch'
+    repo = 'saaas'
+    head = '1ed614fbd4600b4e736e4a36ada545a9bc95ca27'
+    base = '61eb66767e2b6197fb5b499d34fa1e17f834d1c'
+    with pytest.raises(SystemExit) as e:
+        commit_compare(pat=pat, org=org, repo=repo, head=head, base=base)
+    assert e.type == SystemExit
+
 def test_python_bedevere(capfd):
     pat = None
     org = 'python'
